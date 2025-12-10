@@ -36,6 +36,7 @@ data/*
 !data/.gitkeep
 server/chroma_db/
 server/uploads/
+server/parent_store/
 
 # IDE
 .idea/
