@@ -1,0 +1,20 @@
+{"question": "왜 Multi-Agent LLM Systems(MAS)의 실패 원인을 체계적으로 분석할 필요가 있었는가?", "ground_truth": "MAS는 기대와 달리 단일 에이전트 대비 큰 성능 향상을 보여주지 못하고, 높은 실패율을 보였다. 기존에는 실패 원인을 명확히 구조화해 설명하는 체계가 없었기 때문에, MAS의 실패 패턴을 정리하고 일관된 기준을 만드는 것이 필요했다."}
+{"question": "MAST는 어떤 구성 요소로 이루어져 있는가?", "ground_truth": "MAST는 총 14개 실패 모드(failure modes)를 3개 상위 카테고리로 분류하여 구성된다: (1) Specification Issues, (2) Inter-Agent Misalignment, (3) Task Verification."}
+{"question": "어떤 실패 카테고리가 가장 많이 발생했는가?", "ground_truth": "Specification Issues가 약 41.77%로 가장 높은 비중을 차지했다."}
+{"question": "실패 모드 FM-1.1은 무엇을 의미하는가?", "ground_truth": "시스템이 사용자 과업(Task) 요구사항을 따르지 못하고 잘못 해석하거나 무시하는 경우이다."}
+{"question": "왜 FM-1.3 Step Repetition이 MAS에서 자주 발생하는가?", "ground_truth": "엄격한 turn 구조나 prompt 설계 문제가 반복적인 행동 루프를 유발하기 때문이다."}
+{"question": "Inter-Agent Misalignment 카테고리는 어떤 유형의 실패를 다루는가?", "ground_truth": "MAS 내 여러 에이전트 간 협력·조율이 제대로 이루어지지 않아 목표 정렬이 깨지는 실패를 말한다."}
+{"question": "FM-2.4는 어떤 상황에서 발생하는가?", "ground_truth": "한 에이전트가 중요한 정보를 알고 있으나 이를 공유하지 않아 다른 에이전트가 계속 실패하는 경우이다."}
+{"question": "MAS가 과업을 조기 종료하는 상황은 어떤 실패로 분류되는가?", "ground_truth": "FM-3.1 Premature Termination이며, 충분한 검증 없이 작업이 완료되었다고 잘못 판단하는 경우이다."}
+{"question": "MAS에서 Task Verification 단계가 중요한 이유는?", "ground_truth": "MAS의 실패 중 상당수가 검증 부족 또는 잘못된 검증으로 인해 발생하기 때문에, 품질 관리는 필수 요소다."}
+{"question": "Verifier 에이전트 도입만으로 MAS 신뢰성이 충분히 확보되는가?", "ground_truth": "아니다. Verifier가 있어도 대부분의 시스템은 매우 낮은 성공률을 보였으며, 검증 단계가 피상적인 경우가 많다."}
+{"question": "MAST는 어떤 방법론을 통해 도출되었는가?", "ground_truth": "Grounded Theory(GT), open coding, theoretical sampling을 기반으로 200개 이상의 MAS 대화 로그를 분석해 도출되었다."}
+{"question": "MAST의 신뢰도를 보여주는 annotator agreement 수치는?", "ground_truth": "인간 annotator 간 Cohen’s Kappa는 0.88로 매우 높은 합의도를 나타냈다."}
+{"question": "연구에서 LLM-as-a-Judge는 어떤 목적으로 사용되었는가?", "ground_truth": "인간 annotator를 대신해 MAS 실패 모드를 자동으로 분류하는 데 사용되었다."}
+{"question": "LLM Annotator의 성능은 few-shot 예시 제공 여부에 따라 어떻게 달라졌는가?", "ground_truth": "few-shot 제공 시 F1이 0.80까지 향상되며 Cohen’s Kappa도 0.77로 증가했다."}
+{"question": "왜 Specification Issues는 단순 LLM 한계가 아니라 시스템 설계 문제라고 보는가?", "ground_truth": "동일한 명확한 prompt를 줘도 MAS가 설계 구조적 한계 때문에 여전히 잘못된 판단을 하기 때문이다."}
+{"question": "Inter-Agent Misalignment는 왜 단순한 오류가 아니라 구조적 문제인가?", "ground_truth": "정보 공유·정렬에 필요한 프로토콜과 조직 구조가 미흡하면 같은 모델을 사용해도 반복적으로 실패하기 때문이다."}
+{"question": "FM-3.2 No or Incomplete Verification 실패는 어떤 상황인가?", "ground_truth": "프로그램이 겉보기만 통과하고 실제 동작 요구를 충족하지 못했는데도 검증 과정이 이를 잡아내지 못하는 경우이다."}
+{"question": "MAS에서 종종 발생하는 비효율성 문제가 MAST에 포함되지 않은 이유는?", "ground_truth": "MAST는 정확도 중심 taxonomy이며, 비용·효율·속도는 별도 연구 주제라 의도적으로 제외되었다."}
+{"question": "MAST가 MAS 개발 과정에서 어떤 실용적 가치를 제공하는가?", "ground_truth": "실패 유형을 정량적으로 파악해 어디를 개선해야 할지 명확히 도와주고, 개입 전후의 변화도 객관적으로 비교할 수 있게 한다."}
+{"question": "단순히 모델 성능을 높이는 것 외에 MAS를 향상시키기 위해 필요한 것은?", "ground_truth": "에이전트 조직 구조, 역할 설계, 커뮤니케이션 프로토콜, 검증 시스템 등 시스템 레벨 구조 개선이 필요하다."}

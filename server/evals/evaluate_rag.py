@@ -35,53 +35,77 @@ def load_dataset(file_path):
     return data
 
 def main():
-    # Initialize RAG
-    print("Initializing SimpleRAG...")
-    try:
-        rag = SimpleRAG()
-    except Exception as e:
-        print(f"Error initializing RAG: {e}")
-        return
-
-    # Load evaluation data
-    dataset_path = os.path.join(server_dir, "dataset", "evals.jsonl")
-    if not os.path.exists(dataset_path):
-        print(f"Dataset not found at {dataset_path}")
-        return
-
-    print(f"Loading dataset from {dataset_path}...")
-    eval_data = load_dataset(dataset_path)
+    # 1. Check if predictions_with_gt.jsonl exists
+    pred_file = os.path.join(current_dir, "predictions_with_gt.jsonl")
     
-    # Run evaluation
     questions = []
     answers = []
     contexts = []
     ground_truths = []
     
-    print(f"Running evaluation on {len(eval_data)} items...")
-    for i, item in enumerate(eval_data):
-        question = item["question"]
-        ground_truth = item["ground_truth"]
+    if os.path.exists(pred_file):
+        print(f"Found existing predictions at {pred_file}. Using them for evaluation.")
+        eval_data = load_dataset(pred_file)
         
-        print(f"Processing {i+1}/{len(eval_data)}: {question}")
-        
-        try:
-            # Get answer from RAG
-            result = rag.get_answer(question)
+        for item in eval_data:
+            questions.append(item.get("question", ""))
+            answers.append(item.get("answer", ""))
             
-            questions.append(question)
-            answers.append(result["answer"])
             # Ensure contexts is a list of strings
-            retrieved_contexts = result.get("contexts", [])
-            # Fallback if contexts not present (e.g. if simple_rag wasn't updated correctly or reloaded)
-            if not retrieved_contexts and "sources" in result:
-                 retrieved_contexts = [s.get("content", "") for s in result["sources"]]
+            ctx = item.get("contexts", [])
+            if isinstance(ctx, list):
+                # Convert all elements to string just in case
+                contexts.append([str(c) for c in ctx])
+            else:
+                contexts.append([])
+                
+            ground_truths.append(item.get("ground_truth", ""))
             
-            contexts.append(retrieved_contexts)
-            ground_truths.append(ground_truth)
+        print(f"Loaded {len(questions)} items from file.")
+        
+    else:
+        # Initialize RAG
+        print("Initializing SimpleRAG...")
+        try:
+            rag = SimpleRAG()
         except Exception as e:
-            print(f"Error processing question '{question}': {e}")
-            continue
+            print(f"Error initializing RAG: {e}")
+            return
+    
+        # Load evaluation data
+        dataset_path = os.path.join(server_dir, "dataset", "evals.jsonl")
+        if not os.path.exists(dataset_path):
+            print(f"Dataset not found at {dataset_path}")
+            return
+    
+        print(f"Loading dataset from {dataset_path}...")
+        eval_data = load_dataset(dataset_path)
+        
+        # Run evaluation
+        print(f"Running evaluation on {len(eval_data)} items...")
+        for i, item in enumerate(eval_data):
+            question = item["question"]
+            ground_truth = item["ground_truth"]
+            
+            print(f"Processing {i+1}/{len(eval_data)}: {question}")
+            
+            try:
+                # Get answer from RAG
+                result = rag.get_answer(question)
+                
+                questions.append(question)
+                answers.append(result["answer"])
+                # Ensure contexts is a list of strings
+                retrieved_contexts = result.get("contexts", [])
+                # Fallback if contexts not present
+                if not retrieved_contexts and "sources" in result:
+                     retrieved_contexts = [s.get("content", "") for s in result["sources"]]
+                
+                contexts.append(retrieved_contexts)
+                ground_truths.append(ground_truth)
+            except Exception as e:
+                print(f"Error processing question '{question}': {e}")
+                continue
             
     # Prepare dataset for Ragas
     data_dict = {
@@ -121,11 +145,14 @@ def main():
         results_df = results.to_pandas()
         results_df.to_csv(output_csv, index=False)
         print(f"Results saved to {output_csv}")
+
+        # Save as JSON as well
+        output_json = output_csv.replace('.csv', '.json')
+        results_df.to_json(output_json, orient='records', force_ascii=False, indent=2)
+        print(f"Results saved to {output_json}")
         
     except Exception as e:
         print(f"Error during evaluation: {e}")
 
 if __name__ == "__main__":
     main()
-
-

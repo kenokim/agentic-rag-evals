@@ -59,7 +59,8 @@ async def chat_simple(request: ChatRequest):
         result = simple_rag_system.get_answer(request.query)
         return ChatResponse(
             answer=result["answer"],
-            sources=result["sources"]
+            sources=result["sources"],
+            contexts=result["contexts"]
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -12,6 +12,7 @@ class SourceInfo(BaseModel):
 class ChatResponse(BaseModel):
     answer: str = Field(..., description="LLM이 생성한 답변")
     sources: List[SourceInfo] = Field(..., description="답변 생성에 사용된 출처 목록")
+    contexts: List[str] = Field(default=[], description="검색된 문서의 전체 내용 (RAGAS 평가용)")
 
 class IngestResponse(BaseModel):
     status: str = Field(..., description="처리 상태 (success/error)")
