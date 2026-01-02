@@ -38,6 +38,10 @@ server/chroma_db/
 server/uploads/
 server/parent_store/
 
+# Local references / examples (not tracked)
+langchain-example/
+refers/
+
 # IDE
 .idea/
 .vscode/
